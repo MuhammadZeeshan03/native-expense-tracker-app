@@ -2,36 +2,50 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { GlobalStyles } from '../../../constants/style';
 import { getFormatterDate } from '../../../utils/date';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 
 interface ExpenseItemProps {
+  id: string,
   description: string;
   amount: number;
   date: Date;
 }
-const ExpenseItem: React.FC<ExpenseItemProps>
-  = ({ description, amount, date }) => {
 
-    const expensePressHandler = () => {
+// Define your navigation stack types
+type RootStackParamList = {
+  ManageExpenses: { expenseId: string };
+};
 
-    }
-    return (
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'ManageExpenses'>;
 
-      <Pressable
-        onPress={expensePressHandler} style={({ pressed }) => pressed && styles.pressed}>
-        <View style={styles.expenseItem}>
-          <View >
-            <Text style={[styles.textBase, styles.description]}>{description}</Text>
-            <Text style={[styles.textBase]}>{getFormatterDate(date)}</Text>
-          </View>
-          <View style={styles.amountContainer}>
-            <Text style={styles.amount}>{amount.toFixed(2)}</Text>
-          </View>
-        </View>
-      </Pressable>
-    );
+const ExpenseItem: React.FC<ExpenseItemProps> = ({ description, amount, date, id }) => {
+  const navigation = useNavigation<NavigationProp>();
+
+  const expensePressHandler = (id: string) => {
+    navigation.navigate('ManageExpenses', {
+      expenseId: id,
+    });
   }
 
-export default ExpenseItem
+  return (
+    <Pressable
+      onPress={() => expensePressHandler(id)}
+      style={({ pressed }) => pressed && styles.pressed}>
+      <View style={styles.expenseItem}>
+        <View >
+          <Text style={[styles.textBase, styles.description]}>{description}</Text>
+          <Text style={[styles.textBase]}>{getFormatterDate(date)}</Text>
+        </View>
+        <View style={styles.amountContainer}>
+          <Text style={styles.amount}>{amount.toFixed(2)}</Text>
+        </View>
+      </View>
+    </Pressable>
+  );
+}
+
+export default ExpenseItem;
 
 const styles = StyleSheet.create({
   pressed: {
@@ -46,7 +60,6 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     elevation: 3,
   },
-
   textBase: {
     color: GlobalStyles.colors.primary50,
   },
@@ -68,5 +81,4 @@ const styles = StyleSheet.create({
     color: GlobalStyles.colors.primary500,
     fontWeight: 'bold',
   }
-
-})
+});

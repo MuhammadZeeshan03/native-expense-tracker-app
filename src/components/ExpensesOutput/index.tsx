@@ -16,96 +16,96 @@ interface ExpensesOutputProps {
   expensesPeriod: string;
 }
 
-const DUMMY_EXPENSE: Expenses[] = [
+export const DUMMY_EXPENSE: Expenses[] = [
   {
     id: 'e1',
     amount: 100,
     description: 'A pair of shoes',
-    date: new Date('2022-01-01')
+    date: new Date('2024-09-04')
   },
   {
     id: 'e2',
     amount: 50,
     description: 'Groceries',
-    date: new Date('2022-01-03')
+    date: new Date('2024-09-03')
   },
   {
     id: 'e3',
     amount: 200,
     description: 'Monthly rent',
-    date: new Date('2022-01-05')
+    date: new Date('2024-09-02')
   },
   {
     id: 'e4',
     amount: 15,
     description: 'Coffee with friends',
-    date: new Date('2022-01-10')
+    date: new Date('2024-09-01')
   },
   {
     id: 'e5',
     amount: 120,
     description: 'New jacket',
-    date: new Date('2022-01-12')
+    date: new Date('2024-08-04')
   },
   {
     id: 'e6',
     amount: 60,
     description: 'Dinner at a restaurant',
-    date: new Date('2022-01-14')
+    date: new Date('2024-08-03')
   },
   {
     id: 'e7',
     amount: 30,
     description: 'Taxi ride',
-    date: new Date('2022-01-15')
+    date: new Date('2024-08-02')
   },
   {
     id: 'e8',
     amount: 80,
     description: 'Grocery shopping',
-    date: new Date('2022-01-18')
+    date: new Date('2024-08-01')
   },
   {
     id: 'e9',
     amount: 150,
     description: 'Concert tickets',
-    date: new Date('2022-01-20')
+    date: new Date('2024-08-01')
   },
   {
     id: 'e10',
     amount: 40,
     description: 'Gas for the car',
-    date: new Date('2022-01-22')
+    date: new Date('2024-08-02')
   },
   {
     id: 'e11',
     amount: 90,
     description: 'New headphones',
-    date: new Date('2022-01-24')
+    date: new Date('2024-08-03')
   },
   {
     id: 'e12',
     amount: 70,
     description: 'Monthly subscription',
-    date: new Date('2022-01-26')
+    date: new Date('2024-08-28')
   },
   {
     id: 'e13',
     amount: 20,
     description: 'Coffee beans',
-    date: new Date('2022-01-28')
+    date: new Date('2024-08-27')
   },
   {
     id: 'e14',
     amount: 110,
     description: 'Gym membership',
-    date: new Date('2022-01-29')
+    date: new Date('2024-08-26')
   },
   {
     id: 'e15',
     amount: 55,
     description: 'Movie night',
-    date: new Date('2022-01-30')
+    date: new Date('2024-08-25')
   }
 ];
 
@@ -114,8 +114,8 @@ const DUMMY_EXPENSE: Expenses[] = [
 const ExpensesOutput = ({ expenses, expensesPeriod }: ExpensesOutputProps) => {
   return (
     <View style={styles.container}>
-      <ExpensesSummary expenses={DUMMY_EXPENSE} periodName={expensesPeriod} />
-      <ExpensesList expenses={DUMMY_EXPENSE} />
+      <ExpensesSummary expenses={expenses} periodName={expensesPeriod} />
+      <ExpensesList expenses={expenses} />
     </View>
   )
 }
