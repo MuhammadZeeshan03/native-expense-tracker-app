@@ -2,12 +2,13 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { StatusBar } from 'react-native';
+import { StatusBar, View } from 'react-native';
 import AllExpenses from './src/screens/AllExpenses';
 import ManageExpenses from './src/screens/ManageExpenses';
 import RecentExpenses from './src/screens/RecentExpenses';
 import { GlobalStyles } from './constants/style';
 import Ionicons from '@react-native-vector-icons/ionicons';
+import IconButton from './src/components/UI/IconButton';
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -18,7 +19,14 @@ const ExpensesOverview = () => {
       headerStyle: { backgroundColor: GlobalStyles.colors.primary500, },
       headerTintColor: 'white',
       tabBarStyle: { backgroundColor: GlobalStyles.colors.primary500 },
-      tabBarActiveTintColor: GlobalStyles.colors.accent500
+      tabBarActiveTintColor: GlobalStyles.colors.accent500,
+      headerRight: ({ tintColor }) => <IconButton
+        color={tintColor}
+        name={'add'}
+        size={24}
+
+      />
+
 
     }}>
       <BottomTabs.Screen
