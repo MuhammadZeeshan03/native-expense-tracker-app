@@ -5,6 +5,7 @@ import { GlobalStyles } from '../../constants/style';
 import Button from '../components/UI/Button';
 import { ExpenseContext } from '../../store/expenses-context';
 import ExpenseForm, { Input } from '../components/ManageExpense/ExpenseForm';
+import { storeExpense } from '../../utils/http';
 
 const ManageExpenses = ({ route, navigation }: any) => {
   const editedExpenseId = route.params?.expenseId;
@@ -30,11 +31,16 @@ const ManageExpenses = ({ route, navigation }: any) => {
   const cancelHandler = () => {
     navigation.goBack();
   }
-  const confirmHandler = (submittedValues: Input) => {
+  const confirmHandler = (submittedValues: any) => {
+
+    console.log('My submitted values === .', submittedValues)
+
+    console.log()
 
     const updatedExpenseData = {
       ...submittedValues,
-      date: new Date(submittedValues.date!)
+      date: new Date(submittedValues.date!),
+      description: submittedValues.description.value
     }
 
     if (isEditing) {
@@ -43,6 +49,8 @@ const ManageExpenses = ({ route, navigation }: any) => {
         updatedExpenseData
       );
     } else {
+
+      storeExpense(updatedExpenseData)
       expenseCtx.addExpense(
         updatedExpenseData
       );
@@ -65,11 +73,6 @@ const ManageExpenses = ({ route, navigation }: any) => {
             color={GlobalStyles.colors.error500}
             size={36} onPress={deleteExpense}
           /></View>}
-      {/* {!isEditing && <Text>Adding New Expense</Text>}
-      <Button title="Save" />
-      <Button title="Delete" />
-      <Button title="Cancel" onPress={() => navigation.goBack()} /> */}
-
     </View>
   )
 }

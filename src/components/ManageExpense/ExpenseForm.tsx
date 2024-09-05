@@ -58,16 +58,25 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onCancel, onSubmit, submitBut
     if (!amountIsValid || !dateIsValid || !descriptionIsValid) {
       setInputValues((curInputs): any => {
         return {
-          amount: { value: curInputs.amount.value, isValid: amountIsValid, },
-          date: { value: curInputs.date.value, isValid: dateIsValid },
-          description: { value: curInputs.description.value, isValid: descriptionIsValid },
+          amount: {
+            value: curInputs.amount.value,
+            isValid: amountIsValid,
+          },
+          date: {
+            value: curInputs.date.value,
+            isValid: dateIsValid,
+          },
+          description: {
+            value: curInputs.description.value,
+            isValid: descriptionIsValid,
+          },
         }
       })
       return
     }
 
     const expenseData = {
-      amount: +inputValues.amount,
+      amount: +inputValues.amount.value,
       date: new Date(inputValues.date.value!),
       description: inputValues.description,
     }
