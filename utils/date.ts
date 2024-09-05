@@ -1,4 +1,11 @@
 export function getFormattedDate(date: Date) {
+
+  const isValidDate = date.toString() !== 'Invalid Date';
+
+  if (!isValidDate) {
+    return '';
+  }
+
   return date.toISOString().slice(0, 10);
 }
 
