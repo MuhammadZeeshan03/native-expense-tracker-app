@@ -4,6 +4,7 @@ import Input from './Input'
 import Button from '../UI/Button';
 import { getFormattedDate } from '../../../utils/date';
 import { Expenses } from '../ExpensesOutput';
+import { GlobalStyles } from '../../../constants/style';
 
 export interface Input {
   amount: number;
@@ -51,7 +52,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onCancel, onSubmit, submitBut
 
   const submitHandler = () => {
     const amountIsValid = !isNaN(inputValues.amount.value) && inputValues.amount.value > 0;
-    const dateIsValid = inputValues.date?.toString() !== 'Invalid Date'
+    const dateIsValid = !!inputValues.date.value && (inputValues.date?.value.toString() !== 'Invalid Date')
     const descriptionIsValid = inputValues.description.value.trim().length > 0;
 
     if (!amountIsValid || !dateIsValid || !descriptionIsValid) {
@@ -87,6 +88,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onCancel, onSubmit, submitBut
         <Input
           label='Amount'
           style={styles.rowInput}
+          invalid={!inputValues.amount.isValid}
           textInputConfig={{
             keyboardType: 'decimal-pad',
             onChangeText: inputChangedHandler.bind(this, 'amount'),
@@ -95,22 +97,27 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onCancel, onSubmit, submitBut
         <Input
           style={styles.rowInput}
           label='Date'
+          invalid={!inputValues.date.isValid}
           textInputConfig={{
             placeholder: 'YYYY-MM-DD',
             maxlength: 10,
             onChangeText: inputChangedHandler.bind(this, 'date'),
             value: inputValues.date.value
-          }} />
+          }}
+        />
       </View>
-      <Input label='Description' textInputConfig={{
-        multiline: true,
-        autoCorrect: false,
-        onChangeText: inputChangedHandler.bind(this, 'description'),
-        value: inputValues.description.value
-      }} />
+      <Input
+        label='Description'
+        invalid={!inputValues.description.isValid}
+        textInputConfig={{
+          multiline: true,
+          autoCorrect: false,
+          onChangeText: inputChangedHandler.bind(this, 'description'),
+          value: inputValues.description.value
+        }} />
 
 
-      {formIsInValid && <Text>
+      {formIsInValid && <Text style={styles.errorText}>
         Invalid input values - Please check your entered values!</Text>}
 
       <View style={styles.buttons}>
@@ -150,4 +157,9 @@ const styles = StyleSheet.create({
     minWidth: 120,
     marginHorizontal: 8,
   },
+  errorText: {
+    textAlign: 'center',
+    color: GlobalStyles.colors.error500,
+    margin: 8,
+  }
 })
