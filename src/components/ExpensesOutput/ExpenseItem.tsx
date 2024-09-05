@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { GlobalStyles } from '../../../constants/style';
-import { getFormatterDate } from '../../../utils/date';
+import { getFormattedDate } from '../../../utils/date';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 
@@ -35,7 +35,7 @@ const ExpenseItem: React.FC<ExpenseItemProps> = ({ description, amount, date, id
       <View style={styles.expenseItem}>
         <View >
           <Text style={[styles.textBase, styles.description]}>{description}</Text>
-          <Text style={[styles.textBase]}>{getFormatterDate(date)}</Text>
+          <Text style={[styles.textBase]}>{getFormattedDate(date)}</Text>
         </View>
         <View style={styles.amountContainer}>
           <Text style={styles.amount}>{amount.toFixed(2)}</Text>
