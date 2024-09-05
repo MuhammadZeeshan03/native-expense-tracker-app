@@ -1,8 +1,7 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import React, { useContext, useLayoutEffect } from 'react'
 import IconButton from '../components/UI/IconButton';
 import { GlobalStyles } from '../../constants/style';
-import Button from '../components/UI/Button';
 import { ExpenseContext } from '../../store/expenses-context';
 import ExpenseForm, { Input } from '../components/ManageExpense/ExpenseForm';
 import { storeExpense } from '../../utils/http';
@@ -16,26 +15,19 @@ const ManageExpenses = ({ route, navigation }: any) => {
 
   useLayoutEffect(() => {
 
-    navigation.setOptions({
-      title: isEditing ? 'Edit Expense' : 'Add Expense'
-    })
-  }, [navigation, isEditing])
+    navigation.setOptions({ title: isEditing ? 'Edit Expense' : 'Add Expense' })
+  },
+    [navigation, isEditing])
 
   const deleteExpense = () => {
-    expenseCtx.deleteExpense(
-      editedExpenseId
-    );
+    expenseCtx.deleteExpense(editedExpenseId);
     navigation.goBack();
   }
 
   const cancelHandler = () => {
     navigation.goBack();
   }
-  const confirmHandler = (submittedValues: any) => {
-
-    console.log('My submitted values === .', submittedValues)
-
-    console.log()
+  const confirmHandler = async (submittedValues: any) => {
 
     const updatedExpenseData = {
       ...submittedValues,
@@ -50,9 +42,12 @@ const ManageExpenses = ({ route, navigation }: any) => {
       );
     } else {
 
-      storeExpense(updatedExpenseData)
+      const id = await storeExpense(updatedExpenseData)
       expenseCtx.addExpense(
-        updatedExpenseData
+        {
+          ...updatedExpenseData,
+          id
+        }
       );
     }
 
