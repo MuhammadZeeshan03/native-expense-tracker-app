@@ -47,7 +47,7 @@ const ExpensesOverview = () => {
         component={RecentExpenses}
         options={{
           title: 'Recent Expenses',
-          tabBarLabel: 'Recent',
+          tabBarLabel: 'All Expenses',
           tabBarIcon: ({ size, color }) => <Ionicons name='calendar' size={size} color={color} />
         }} />
     </BottomTabs.Navigator>
