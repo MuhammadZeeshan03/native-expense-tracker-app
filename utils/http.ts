@@ -1,8 +1,10 @@
 import axios from 'axios'
 import { Expenses } from '../src/components/ExpensesOutput'
 
+const BACKEND_URL = process.env.FIREBASE_URL
+
 export const storeExpense = async (expenseData: Expenses) => {
-  const response = await axios.post(process.env.FIREBASE_URL!,
+  const response = await axios.post(BACKEND_URL! + '/expenses.json',
     expenseData
   );
   const id = response.data.name;
@@ -10,7 +12,7 @@ export const storeExpense = async (expenseData: Expenses) => {
 }
 
 export const fetchExpenses = async () => {
-  const response = await axios.get(process.env.FIREBASE_URL!);
+  const response = await axios.get(BACKEND_URL! + '/expenses.json');
   const expenses = [];
 
   for (const key in response.data) {
@@ -24,4 +26,11 @@ export const fetchExpenses = async () => {
   }
 
   return expenses;
+}
+
+export const updateExpense = ({ id, expenseData }: any) => {
+  return axios.put(BACKEND_URL! + `/expenses/${id}.json`, expenseData);
+}
+export const deleteExpense = async (id: string) => {
+  return axios.delete(BACKEND_URL! + `/expenses/${id}.json`);
 }
