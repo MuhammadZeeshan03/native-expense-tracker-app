@@ -1,15 +1,19 @@
 import { StyleSheet, View } from 'react-native'
-import React, { useContext, useLayoutEffect } from 'react'
+import React, { useContext, useLayoutEffect, useState } from 'react'
 import IconButton from '../components/UI/IconButton';
 import { GlobalStyles } from '../../constants/style';
 import { ExpenseContext } from '../../store/expenses-context';
 import ExpenseForm, { Input } from '../components/ManageExpense/ExpenseForm';
 import { storeExpense, updateExpense, deleteExpense } from '../../utils/http';
+import LoadingOverlay from '../components/UI/LoadingOverlay';
+import ErrorOverlay from '../components/UI/ErrorOverlay';
 
 const ManageExpenses = ({ route, navigation }: any) => {
   const editedExpenseId = route.params?.expenseId;
   const isEditing = !!editedExpenseId;
   const expenseCtx = useContext(ExpenseContext);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null)
 
   const expenseData = expenseCtx.expenses.find((expense) => expense.id === editedExpenseId)
 
@@ -20,37 +24,55 @@ const ManageExpenses = ({ route, navigation }: any) => {
     [navigation, isEditing])
 
   const deleteExpenseHandler = async () => {
-    await deleteExpense(editedExpenseId);
-    expenseCtx.deleteExpense(editedExpenseId);
-    navigation.goBack();
+    setIsUploading(true);
+    try {
+      await deleteExpense(editedExpenseId);
+      expenseCtx.deleteExpense(editedExpenseId);
+      navigation.goBack();
+    } catch (error) {
+      setError('An error occured while deleting the expense data');
+      setIsUploading(false);
+    }
   }
 
   const cancelHandler = () => {
     navigation.goBack();
   }
   const confirmHandler = async (submittedValues: any) => {
+    setIsUploading(true);
 
     const updatedExpenseData = {
       ...submittedValues,
       date: new Date(submittedValues.date!),
       description: submittedValues.description.value
     }
+    try {
+      if (isEditing) {
+        expenseCtx.updateExpense(editedExpenseId, updatedExpenseData);
+        await updateExpense({ id: editedExpenseId, expenseData: updatedExpenseData })
+      } else {
+        const id = await storeExpense(updatedExpenseData)
+        expenseCtx.addExpense(
+          {
+            ...updatedExpenseData,
+            id
+          }
+        );
+      }
 
-    if (isEditing) {
-      expenseCtx.updateExpense(editedExpenseId, updatedExpenseData);
-      updateExpense({ id: editedExpenseId, expenseData: updatedExpenseData })
-    } else {
-
-      const id = await storeExpense(updatedExpenseData)
-      expenseCtx.addExpense(
-        {
-          ...updatedExpenseData,
-          id
-        }
-      );
+      navigation.goBack();
+    } catch (error) {
+      setError('An error occured while saving the expense data');
+      setIsUploading(false);
     }
+  }
 
-    navigation.goBack();
+  if (error && !isUploading) {
+    return <ErrorOverlay message={error} />
+  }
+
+  if (isUploading) {
+    return <LoadingOverlay />
   }
 
   return (
